@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mao Strategy Thinking"
+  short_description: "Decision strategy using Mao Selected Works"
+  default_prompt: "Use $mao-strategy-thinking to analyze this decision with Mao Selected Works strategy frameworks."
