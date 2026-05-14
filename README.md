@@ -59,6 +59,88 @@ python3 ~/.codex/skills/mao-strategy-thinking/scripts/search_maoxuan.py 全局 �
 
 The script expects an unpacked EPUB directory containing `OEBPS/Text/*.xhtml`.
 
+## Stability Notes and Troubleshooting
+
+The skill itself is plain Markdown plus one standard-library Python script, so the core decision-analysis workflow should be stable after installation. Most issues come from local setup differences.
+
+### Codex does not detect the skill
+
+Check that the installed path is exactly:
+
+```text
+~/.codex/skills/mao-strategy-thinking/SKILL.md
+```
+
+If you cloned this repository, remember that the skill is nested under `skills/`:
+
+```bash
+mkdir -p ~/.codex/skills
+cp -R skills/mao-strategy-thinking ~/.codex/skills/
+```
+
+Then start a new Codex conversation or explicitly invoke:
+
+```text
+Use $mao-strategy-thinking to analyze this decision: ...
+```
+
+### The skill works, but source search fails
+
+Source search is optional. The decision framework works without local source text.
+
+If search fails with:
+
+```text
+Provide --epub or set $MAOXUAN_EPUB_PATH to your local unpacked EPUB directory.
+```
+
+set the source path:
+
+```bash
+export MAOXUAN_EPUB_PATH="/path/to/your/unpacked/epub"
+```
+
+Or pass it directly:
+
+```bash
+python3 ~/.codex/skills/mao-strategy-thinking/scripts/search_maoxuan.py 主要矛盾 --epub "/path/to/your/unpacked/epub"
+```
+
+### My EPUB is a single `.epub` file
+
+The search script expects an unpacked EPUB directory, not a zipped `.epub` file. An unpacked source should contain:
+
+```text
+OEBPS/Text/*.xhtml
+OEBPS/toc.ncx
+```
+
+If your file is a normal EPUB archive, unpack it into a local directory first. Do not commit the unpacked book files to this repository.
+
+### My EPUB has a different internal structure
+
+Some EPUBs do not use `OEBPS/Text/*.xhtml` or `toc.ncx`. In that case:
+
+- the skill still works as a decision framework
+- the search script may need adaptation for your EPUB layout
+- use `--epub` to point at the root directory that contains the book content
+- inspect the EPUB directory and update `scripts/search_maoxuan.py` if text files live elsewhere
+
+### Python issues
+
+`search_maoxuan.py` uses only the Python standard library. It should run with Python 3.9+:
+
+```bash
+python3 --version
+python3 ~/.codex/skills/mao-strategy-thinking/scripts/search_maoxuan.py --help
+```
+
+No pip dependencies are required.
+
+### Public sharing and copyright
+
+This repository intentionally excludes source book files. Users should provide their own legally obtained local copy if they want source search. Keep `.epub`, unpacked `OEBPS/`, and similar book files out of commits.
+
 ## Repository Layout
 
 ```text
